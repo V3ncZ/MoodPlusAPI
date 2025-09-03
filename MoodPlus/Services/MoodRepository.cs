@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+﻿using MongoDB.Bson;
+using MongoDB.Driver;
 
 namespace MoodPlus.Services
 {
@@ -12,30 +13,20 @@ namespace MoodPlus.Services
             _collection = database.GetCollection<T>(collectionName);
         }
 
-        public Task<List<T>> GetAllAsync()
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<List<T>> GetAllAsync() =>
+            await _collection.Find(_ => true).ToListAsync();
 
-        public Task<T?> GetByIdAsync(string id)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<T?> GetByIdAsync(int id) =>
+            await _collection.Find(Builders<T>.Filter.Eq("id", id)).FirstOrDefaultAsync();
 
-        public Task CreateAsync(T entity)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task CreateAsync(T entity) =>
+            await _collection.InsertOneAsync(entity);
 
-        public Task UpdateAsync(int id, T entity)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task UpdateAsync(int id, T entity) =>
+            await _collection.ReplaceOneAsync(Builders<T>.Filter.Eq("id", id), entity);
 
-        public Task DeleteAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task DeleteAsync(int id) =>
+            await _collection.DeleteOneAsync(Builders<T>.Filter.Eq("id", id));
 
     }
 }
