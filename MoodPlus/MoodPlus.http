@@ -1,0 +1,6 @@
+@MoodPlus_HostAddress = http://localhost:5289
+
+GET {{MoodPlus_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
