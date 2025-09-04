@@ -6,7 +6,7 @@ using NPOI.SS.Formula.Functions;
 
 namespace MoodPlus.Services
 {
-    public class UserService : UserRepository
+    public class UserService : IUserService
     {
 
         private readonly DAO<User> _repository;
@@ -33,7 +33,7 @@ namespace MoodPlus.Services
 
         public async Task<User?> GetById(int id)
         {
-            return await GetById(id);
+            return await _repository.GetByIdAsync(id);
         }
 
         public Task Update(int id, User entity)

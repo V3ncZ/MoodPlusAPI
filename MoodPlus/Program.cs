@@ -1,5 +1,8 @@
 using MongoDB.Driver;
 using MoodPlus.Data;
+using MoodPlus.Model;
+using MoodPlus.Repositories;
+using MoodPlus.Services;
 using static MoodPlus.Data.MongoDbConnection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,6 +26,9 @@ builder.Services.AddSingleton<IMongoDatabase>(s =>
     var client = s.GetRequiredService<MongoClient>();
     return client.GetDatabase(settings.DatabaseName);
 });
+
+builder.Services.AddSingleton<DAO<User>>();
+builder.Services.AddSingleton<IUserService, UserService>();
 
 var app = builder.Build();
 

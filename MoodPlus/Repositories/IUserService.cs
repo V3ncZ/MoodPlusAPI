@@ -2,7 +2,7 @@
 
 namespace MoodPlus.Repositories
 {
-    public interface UserRepository
+    public interface IUserService
     {
         Task<List<User>> GetAll();
         Task<User?> GetById(int id);

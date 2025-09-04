@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MoodPlus.Data;
 using MoodPlus.Model;
+using MoodPlus.Services;
 
 namespace MoodPlus.Controllers
 {
@@ -8,20 +9,17 @@ namespace MoodPlus.Controllers
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
-        private readonly MongoDbConnection _connection;
-        private readonly DAO<User> _dao;
+        private readonly UserService _userService;
 
-        // Dependecy injection
-        public UserController(MongoDbConnection connection, DAO<User> dao)
+        public UserController(UserService userService) 
         {
-            _connection = connection;
-            _dao = dao;
+            _userService = userService;
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateUser(User user)
         {
-            await _dao.CreateAsync(user);
+            await _userService.Create(user);
             return Ok(user);
         }
     }
