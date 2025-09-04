@@ -8,5 +8,9 @@ namespace MoodPlus.Model
         [BsonId]
         [BsonRepresentation(BsonType.Int32)]
         public int Id { get; set; }
+        [BsonRequired]
+        public string Name { get; set; }
+        [BsonRequired]
+        public string Email { get; set; }
     }
 }
