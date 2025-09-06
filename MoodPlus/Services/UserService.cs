@@ -21,7 +21,7 @@ namespace MoodPlus.Services
             await _repository.CreateAsync(user);
         }
 
-        public async Task Delete(int id)
+        public async Task Delete(string id)
         {
             await _repository.DeleteAsync(id);
         }
@@ -31,12 +31,12 @@ namespace MoodPlus.Services
             return await _repository.GetAllAsync();
         }
 
-        public async Task<User?> GetById(int id)
+        public async Task<User?> GetById(string id)
         {
             return await _repository.GetByIdAsync(id);
         }
 
-        public Task Update(int id, User entity)
+        public Task Update(string id, User entity)
         {
             return _repository.UpdateAsync(id, entity);
         }

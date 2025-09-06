@@ -21,7 +21,7 @@ namespace MoodPlus.Data
             await _collection.Find(_ => true).ToListAsync();
 
         // Method that gets a specific document based on the provided id
-        public async Task<T?> GetByIdAsync(int id) =>
+        public async Task<T?> GetByIdAsync(string id) =>
             await _collection.Find(Builders<T>.Filter.Eq("id", id)).FirstOrDefaultAsync();
 
         // Creates a document based on the provided entity
@@ -29,11 +29,11 @@ namespace MoodPlus.Data
             await _collection.InsertOneAsync(entity);
 
         // Updates the document based on the provided id
-        public async Task UpdateAsync(int id, T entity) =>
+        public async Task UpdateAsync(string id, T entity) =>
             await _collection.ReplaceOneAsync(Builders<T>.Filter.Eq("id", id), entity);
 
         // Deletes the document based on the provided id
-        public async Task DeleteAsync(int id) =>
+        public async Task DeleteAsync(string id) =>
             await _collection.DeleteOneAsync(Builders<T>.Filter.Eq("id", id));
 
     }

@@ -27,8 +27,12 @@ builder.Services.AddSingleton<IMongoDatabase>(s =>
     return client.GetDatabase(settings.DatabaseName);
 });
 
-builder.Services.AddSingleton<DAO<User>>();
-builder.Services.AddSingleton<IUserService, UserService>();
+builder.Services.AddSingleton<DAO<User>>(sp =>
+{
+    var db = sp.GetRequiredService<IMongoDatabase>();
+    return new DAO<User>(db, "Users"); 
+});
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 

@@ -6,8 +6,8 @@ namespace MoodPlus.Model
     public class User
     {
         [BsonId]
-        [BsonRepresentation(BsonType.Int32)]
-        public int Id { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; }
         [BsonRequired]
         public string Name { get; set; }
         [BsonRequired]
