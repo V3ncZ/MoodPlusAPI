@@ -1,4 +1,5 @@
 using MongoDB.Driver;
+using MoodPlus.Authentication;
 using MoodPlus.Data;
 using MoodPlus.Model;
 using MoodPlus.Repositories;
@@ -7,6 +8,7 @@ using static MoodPlus.Data.MongoDbConnection;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddTransient<TokenService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

@@ -1,4 +1,6 @@
-﻿namespace MoodPlus.Responses
+﻿using MongoDB.Bson;
+
+namespace MoodPlus.Responses
 {
     public record UserResponse(string id, string name, string email)
     {

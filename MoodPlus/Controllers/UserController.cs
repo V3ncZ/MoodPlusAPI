@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
 using MoodPlus.Model;
 using MoodPlus.Repositories;
 using MoodPlus.Requests;
@@ -30,7 +31,7 @@ namespace MoodPlus.Controllers
             await _userService.Create(user);
 
             var response = new UserResponse(
-                user.Id,
+                user.Id.ToString(),
                 user.Name,
                 user.Email
             );
@@ -44,7 +45,7 @@ namespace MoodPlus.Controllers
             var users = await _userService.GetAll();
 
             var response = users.Select(u => new UserResponse(
-                u.Id,
+                u.Id.ToString(),
                 u.Name,
                 u.Email
             )).ToList();
@@ -55,17 +56,23 @@ namespace MoodPlus.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateUser(string id, [FromBody] UserRequest userRequest)
         {
-            var userToFind = await _userService.GetById(id);
+            if (!ObjectId.TryParse(id, out var objectId))
+            {
+                // Se a conversão falhar, retorna um erro de requisição inválida
+                return BadRequest("ID inválido. O ID deve ser um ObjectId de 24 caracteres.");
+            }
+
+            var userToFind = await _userService.GetById(objectId);
 
             if (userToFind is not null)
             {
                 userToFind.Name = userRequest.name;
                 userToFind.Email = userRequest.email;
 
-                await _userService.Update(id, userToFind);
+                await _userService.Update(objectId, userToFind);
 
                 var newUserResponse = new UserResponse(
-                    userToFind.Id,
+                    userToFind.Id.ToString(),
                     userToFind.Name,
                     userToFind.Email
                 );
@@ -79,15 +86,22 @@ namespace MoodPlus.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteUser(string id)
         {
-            var userToDelete = await _userService.GetById(id);
+
+            if (!ObjectId.TryParse(id, out var objectId))
+            {
+                // Se a conversão falhar, retorna um erro de requisição inválida
+                return BadRequest("ID inválido. O ID deve ser um ObjectId de 24 caracteres.");
+            }
+
+            var userToDelete = await _userService.GetById(objectId);
 
             if (userToDelete is not null)
             {
-                await _userService.Delete(id);
+                await _userService.Delete(objectId);
                 return Ok();
             }
 
-            return NotFound(id);
+            return NotFound();
         }
     }
 }
