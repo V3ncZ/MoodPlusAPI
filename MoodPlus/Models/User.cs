@@ -12,5 +12,6 @@ namespace MoodPlus.Model
         public string Name { get; set; }
         [BsonRequired]
         public string Email { get; set; }
+        public Enum[] Roles { get; set; }
     }
 }

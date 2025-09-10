@@ -1,4 +1,5 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using MoodPlus.Model;
@@ -18,9 +19,12 @@ namespace MoodPlus.Authentication
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
+                Subject = GenerateClaims(user),
                 SigningCredentials = credentials,
                 // Within 5 hours the token will expire
                 Expires = DateTime.UtcNow.AddHours(5),
+                Issuer = "MoodPlusAPI",
+                Audience = "MoodPlusClient"
             };
 
             // Creates a token
@@ -28,6 +32,19 @@ namespace MoodPlus.Authentication
 
             // Creates a string of the token
             return handler.WriteToken(token);
+        }
+
+        private static ClaimsIdentity GenerateClaims(User user)
+        {
+            var ci = new ClaimsIdentity();
+            ci.AddClaim(new Claim(ClaimTypes.Name, user.Email));
+            if (user.Roles != null) 
+            {
+                foreach (var role in user.Roles)
+                    ci.AddClaim(new Claim(ClaimTypes.Role, role.ToString()));
+            }
+
+            return ci;
         }
     }
 }
